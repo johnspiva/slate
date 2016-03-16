@@ -2,167 +2,261 @@
 title: API Reference
 
 language_tabs:
-  - shell
-  - ruby
-  - python
+  - shell : Shell
+  - javascript : JavaScript
+
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href="https://shielded-ravine-63777.herokuapp.com/">Back to Incident Reporter</a>
 
-includes:
-  - errors
+
 
 search: true
 ---
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the IncidentReporter API! You can use our API to access IncidentReporter API endpoints.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+Currently, all endpoints can be accessed without any type of authorization header. 
 
-This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
 
-# Authentication
+# Incidents
 
-> To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
+## Get All Incidents
 
 ```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+curl "https://shielded-ravine-63777.herokuapp.com/api/v1/incidents"
 ```
 
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-# Kittens
-
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+```javascript
+$.ajax({
+  method: "GET",
+  url: "https://shielded-ravine-63777.herokuapp.com/api/v1/incidents",
+})
+  .done(function( data ) {
+  });
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+  {"incidents":
+    [
+      {
+        "id":1,
+        "created_at":"2016-03-16T04:19:16.330Z",
+        "detail":"Example details listed here",
+        "location":"Halligan Hall, Medford, MA, United States",
+        "title":"Broken Glass",
+        "priority":"High",
+        "img_url":null
+      },
+      {
+        "id":2,
+        "created_at":"2016-03-16T04:19:53.519Z",
+        "detail":"More information",
+        "location":"Latin Way Medford MA",
+        "title":"Weird Smell",
+        "priority":"Medium",
+        "img_url":null
+      }
+    ]
   }
-]
 ```
 
-This endpoint retrieves all kittens.
+This endpoint retrieves all incidents.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET https://shielded-ravine-63777.herokuapp.com/api/v1/incidents`
 
 ### Query Parameters
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+Parameter | Required | Default | Description
+--------- | -------- | ------- | -----------
+limit | False | 500 | Limits the number of incidents that are returned. Max:1000.
+order_by | False | id | Options: id, created_by, date.
 
 <aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+Remember — Try to limit the number of incidents you request to avoid slowing your page load time!
 </aside>
 
-## Get a Specific Kitten
 
-```ruby
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
+## Get a Specific Incident
 
 ```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
+curl "https://shielded-ravine-63777.herokuapp.com/api/v1/incidents/[id]"
+```
+
+```javascript
+$.ajax({
+  method: "GET",
+  url: "https://shielded-ravine-63777.herokuapp.com/api/v1/incidents/[id]",
+})
+  .done(function( data ) {
+  });
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "id":2,
+  "created_at":"2016-03-16T04:19:53.519Z",
+  "detail":"More information",
+  "location":"Latin Way Medford MA",
+  "title":"Weird Smell",
+  "priority":"Medium",
+  "img_url":null
 }
 ```
 
-This endpoint retrieves a specific kitten.
+This endpoint retrieves a specific incident.
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET https://shielded-ravine-63777.herokuapp.com/api/v1/incidents/[id]`
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+Parameter | Required | Default | Description
+--------- | -------- | ------- | -----------
+id | True | - | The ID for the incident to be retrieved
+
+
+
+## Create a New Incident
+
+```shell
+curl --data "title=value1&detail=value2&location=value3&priority=value4"
+      "https://shielded-ravine-63777.herokuapp.com/api/v1/incidents/new"
+```
+
+```javascript
+$.ajax({
+  method: "POST",
+  url: "https://shielded-ravine-63777.herokuapp.com/api/v1/incidents/new",
+  data: "title=value1&detail=value2&location=value3&priority=value4",
+  dataType: dataType
+})
+  .done(function( data ) {
+  });
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "status":"success", 
+  "id":[assigned incident ID]
+}
+```
+
+This endpoint creates a new incident.
+
+
+### HTTP Request
+
+`POST https://shielded-ravine-63777.herokuapp.com/api/v1/incidents/new`
+
+### Query Parameters
+
+Parameter | Required | Default | Description
+--------- | -------- | ------- | -----------
+title | True | - | The title for the new incident
+detail | True | - | The detail for a new incident
+location | True | - | The string value of a location
+priority | True | - | Low, Medium, High
+img_url | False | - | The url for an image to be associated with the incident
+
+
+# Users
+
+## Get a Specific User
+
+```shell
+curl "https://shielded-ravine-63777.herokuapp.com/api/v1/users/[id]"
+```
+
+```javascript
+$.ajax({
+  method: "GET",
+  url: "https://shielded-ravine-63777.herokuapp.com/api/v1/users/[id]",
+})
+  .done(function( data ) {
+  });
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "id":1,
+  "fname":"First Name",
+  "lname":"Last Name"
+}
+```
+
+This endpoint retrieves all users.
+
+### HTTP Request
+
+`GET https://shielded-ravine-63777.herokuapp.com/api/v1/users/[id]`
+
+### URL Parameters
+
+Parameter | Required | Default | Description
+--------- | -------- | ------- | -----------
+id | True | - | The ID for the user to be retrieved
+
+<aside class="success">
+Soon you will only be able to access user information for users that you have permission to view
+</aside>
+
+
+## Create a New User
+
+```shell
+curl --data "fname=value1&lname=value2"
+      "https://shielded-ravine-63777.herokuapp.com/api/v1/users/new"
+```
+
+```javascript
+$.ajax({
+  method: "POST",
+  url: "https://shielded-ravine-63777.herokuapp.com/api/v1/users/new",
+  data: "fname=value1&lname=value2",
+  dataType: dataType
+})
+  .done(function( data ) {
+  });
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "status":"success", 
+  "id":[assigned user ID]
+}
+```
+
+This endpoint creates a new incident.
+
+
+### HTTP Request
+
+`POST https://shielded-ravine-63777.herokuapp.com/api/v1/users/new`
+
+### Query Parameters
+
+Parameter | Required | Default | Description
+--------- | -------- | ------- | -----------
+fname | True | - | String, first name of user
+lname | True | - | String, last name of user
+
 
